@@ -1,11 +1,9 @@
-const crypto = require('crypto');
 const connection = require('../database/connection');
 
 module.exports = {
     async create(request, response) {
         const { title, description, value } = request.body;
         const ong_id = request.headers.authorization;
-        console.log(request.body);
         const [id]= await connection('incidents').insert(
             {
                 title,
@@ -30,7 +28,6 @@ module.exports = {
                 'ongs.city',
                 'ongs.uf'
             ]);
-        console.log(ongs);
         response.header("X-Total_count",count['count(*)']);
         return response.json(ongs);
     },
@@ -38,7 +35,6 @@ module.exports = {
         // const ong_id = request.headers.authorization;
         const ong_id = request.params.ong_id;
         const ongs = await connection('incidents').select('*').where({"ong_id": ong_id});
-        console.log(ongs);
         return response.json(ongs);
     },
     async delete(request, response) {
